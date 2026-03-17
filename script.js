@@ -1,5 +1,27 @@
 const MAX_SIZE_DIGITS = 16;
 
+const KEYBOARD_KEYS = {
+    0: 'zero',
+    1: 'one',
+    2: 'two',
+    3: 'three',
+    4: 'four',
+    5: 'five',
+    6: 'six',
+    7: 'seven',
+    8: 'eight',
+    9: 'nine',
+    '+': 'add',
+    '-': 'subtract',
+    '*': 'multiply',
+    '/': 'backspace',
+    '=': 'equal',
+    Enter: 'equal',
+    '.': 'period',
+    Delete: 'clear',
+    Backspace: 'backspace',
+}
+
 const DIGITS = {
   zero: '0',
   one: '1',
@@ -179,5 +201,25 @@ ui.buttons.addEventListener('click', (e) => {
         showError(e.message);
     }
 })
+
+document.addEventListener('keydown', (e) => {
+    const key = e.key;
+    if (!key) {
+        return;
+    }
+
+    if (!(key in KEYBOARD_KEYS)) {
+        return;
+    }
+
+    try {
+        handle(KEYBOARD_KEYS[key]);
+        updateDisplay();
+    } catch(e) {
+        clear();
+        console.log(e.message);
+        showError(e.message);
+    }
+});
 
 updateDisplay();

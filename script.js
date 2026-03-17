@@ -1,15 +1,19 @@
+const MAX_SIZE_DIGITS = 16;
+
 const DIGITS = {
-  zero: 0,
-  one: 1,
-  two: 2,
-  three: 3,
-  four: 4,
-  five: 5,
-  six: 6,
-  seven: 7,
-  eight: 8,
-  nine: 9,
+  zero: '0',
+  one: '1',
+  two: '2',
+  three: '3',
+  four: '4',
+  five: '5',
+  six: '6',
+  seven: '7',
+  eight: '8',
+  nine: '9',
 };
+
+const PERIOD = '.';
 
 const add = (x, y) => x + y;
 
@@ -34,7 +38,7 @@ const OPERATIONS = {
 
 const state = {
     lastOperation: undefined,
-    lastOperand: 0,
+    lastOperand: '0',
     currentOperand: undefined,
 }
 
@@ -43,13 +47,35 @@ const ui = {
     buttons: document.querySelector('#buttons'),
 }
 
+function operate(operation, op1, op2) {
+    const result = String(Math.floor(operation(Number(op1), Number(op2)) * 100000) / 100000);
+    if (result.length > MAX_SIZE_DIGITS) {
+        throw new TypeError("Number too big!");
+    }
+    return result;
+}
+
 function updateCurrentOperand(operand) {
-    if (state.currentOperand === undefined || state.currentOperand === 0) {
+    if (state.currentOperand === undefined || state.currentOperand === '0') {
         state.currentOperand = operand;
         return;
     }
 
-    state.currentOperand = parseInt(`${state.currentOperand}${operand}`);
+    if (state.currentOperand.length < MAX_SIZE_DIGITS) {
+        state.currentOperand += operand;
+    }
+}
+
+function addPeriod() {
+    if (state.currentOperand === undefined) {
+        state.currentOperand = DIGITS.zero + PERIOD;
+        return;
+    }
+
+    if (!/\./.test(state.currentOperand) && state.currentOperand.length < MAX_SIZE_DIGITS - 1) {
+        state.currentOperand += PERIOD;
+        return;
+    }
 }
 
 function equal() {
@@ -62,15 +88,28 @@ function equal() {
         return;
     }
 
-    state.lastOperand = state.lastOperation(state.lastOperand, state.currentOperand);
+    state.lastOperand = operate(state.lastOperation, state.lastOperand, state.currentOperand);
     state.lastOperation = undefined;
     state.currentOperand = undefined;
 }
 
 function clear() {
     state.lastOperation = undefined;
-    state.lastOperand = 0;
+    state.lastOperand = DIGITS.zero;
     state.currentOperand = undefined;
+}
+
+function backspace() {
+    if (state.currentOperand === undefined) {
+        return;
+    }
+
+    if (state.currentOperand.length === 1) {
+        state.currentOperand = DIGITS.zero;
+        return;
+    }
+
+    state.currentOperand = state.currentOperand.substring(0, state.currentOperand.length - 1);
 }
 
 function updateLastOperation(operation) {
@@ -86,7 +125,7 @@ function updateLastOperation(operation) {
         return;
     }
 
-    state.lastOperand = state.lastOperation(state.lastOperand, state.currentOperand);
+    state.lastOperand = operate(state.lastOperation, state.lastOperand, state.currentOperand);
     state.lastOperation = operation;
     state.currentOperand = undefined;
 }
@@ -110,11 +149,17 @@ function handle(id) {
     }
 
     switch(id) {
+        case 'period':
+            addPeriod();
+            break;
         case 'equal':
             equal();
             break;
         case 'clear':
             clear();
+            break;
+        case 'backspace':
+            backspace();
             break;
     }
 }

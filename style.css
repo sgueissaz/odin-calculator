@@ -1,12 +1,14 @@
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-html {
+body {
     height: 100vh;
 
     background-color: white;
-
+    
     display: flex;
     justify-content: center;
     align-items: center;
@@ -14,21 +16,16 @@ html {
 
 #calculator {
     border: 1px solid black;
-    padding: 1vmin;
-
-    width: 40vmin;
-    height: 40vmin;
-
-    margin: 0;
+    padding: 0.5rem;
     
     display: flex;
     flex-direction: column;
-    gap: 1vmin;
+    gap: 0.5rem;
 }
 
 #display {
-    padding: 1vmin;
-    font-size: 4vmin;
+    padding: 0.5rem;
+    font-size: 2rem;
     text-align: right;
     border: 1px solid black;
 }
@@ -36,7 +33,7 @@ html {
 #buttons {
     flex: 1;
     display: flex;
-    gap: 1vmin;
+    gap: 0.5rem;
 }
 
 #lines {
@@ -44,7 +41,7 @@ html {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 1vmin;
+    gap: 0.5rem;
 }
 
 #columns {
@@ -52,22 +49,23 @@ html {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: 1vmin;
+    gap: 0.5rem;
 }
 
 .line {
     display: flex;
-    gap: 1vmin;
+    gap: 0.5rem;
 }
 
 .column {
     display: flex;
     flex-direction: column;
-    gap: 1vmin;
+    gap: 0.5rem;
 }
 
 .button {
     flex: 1;
-    font-size: 3.5vmin;
+    font-size: 2rem;
+    width: 4rem;
 }
 
